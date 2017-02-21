@@ -4,6 +4,11 @@
     ViewBag.Title = "Delete";
 }
 
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
 <h2>Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -11,12 +16,11 @@
     <h4>Photo</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Photo.UploadFileName)
-        </dt>
+
+        @Html.HiddenFor(model => model.Photo.PhotoId)
 
         <dd>
-            @Html.DisplayFor(model => model.Photo.UploadFileName)
+            @Html.DisplayNameFor(model => model.Photo.UploadFileName)
         </dd>
 
         <dt>
@@ -61,12 +65,13 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "Update")
         </div>
-    }
+
 </div>
+
+    }
+

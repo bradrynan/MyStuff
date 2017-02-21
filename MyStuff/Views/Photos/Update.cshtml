@@ -30,6 +30,7 @@
 
 @using (Html.BeginForm("Update", "Photos", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
 
     <p>
         <input type="submit" value="Save Changes" />
@@ -95,7 +96,7 @@
 
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = Model.Content[i].PhotoId })
+                    @Html.ActionLink("Delete", "Delete", new { photoId = Model.Content[i].PhotoId })
                 </td>
             </tr>
         }

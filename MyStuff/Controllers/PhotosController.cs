@@ -44,7 +44,7 @@ namespace MyStuff.Controllers
 
         // POST: Photos/Create
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Update(List<Photo> Photos)
         {
             if (ModelState.IsValid)
@@ -170,23 +170,24 @@ namespace MyStuff.Controllers
             return View(photo);
         }
 
+        #region Delete
         // GET: Photos/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? photoId)
         {
-            DeletePhotosViewModel vm = new DeletePhotosViewModel(id);
-
-            return View(vm);
+            return View(new DeletePhotosViewModel(photoId));
         }
 
-        // POST: Photos/Delete/5
-        [HttpPost, ActionName("Delete")]
+
+        // POST: Photos/Delete
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(DeletePhotosViewModel vm)
         {
-            new DeletePhotosViewModel().DeletePhoto(id);
+            new DeletePhotosViewModel().DeletePhoto(vm.Photo.PhotoId);
 
             return RedirectToAction("Update");
         }
+        #endregion Delete
 
 
         #region Upload Files
