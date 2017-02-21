@@ -227,29 +227,48 @@
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\DeletePhotosViewModel.cs" />
+    <Compile Include="ViewModels\GalleryPhotosViewModel.cs" />
+    <Compile Include="ViewModels\UploadPhotosViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\blueimp-gallery-indicator.css" />
+    <Content Include="Content\blueimp-gallery-video.css" />
+    <Content Include="Content\blueimp-gallery.css" />
+    <Content Include="Content\blueimp-gallery.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MyStyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\error.png" />
+    <Content Include="img\error.svg" />
+    <Content Include="img\loading.gif" />
+    <Content Include="img\play-pause.png" />
+    <Content Include="img\play-pause.svg" />
+    <Content Include="img\video-play.png" />
+    <Content Include="img\video-play.svg" />
     <Content Include="Scripts\bootstrap-image-gallery.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\blueimp-gallery.min.css.map" />
+    <None Include="Properties\PublishProfiles\BradRynanGitSample - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.blueimp-gallery.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\MyScripts.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -289,12 +308,13 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Photos\Create.cshtml" />
     <Content Include="Views\Photos\Delete.cshtml" />
     <Content Include="Views\Photos\Details.cshtml" />
     <Content Include="Views\Photos\Edit.cshtml" />
-    <Content Include="Views\Photos\Index.cshtml" />
+    <Content Include="Views\Photos\Update.cshtml" />
+    <Content Include="Views\Photos\Gallery.cshtml" />
+    <Content Include="Views\Photos\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

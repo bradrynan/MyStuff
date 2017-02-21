@@ -25,6 +25,7 @@ namespace MyStuff.Models
         public String ImagePath { get; set; }
 
         [Display(Name = "Created On")]
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreatedOn { get; set; }
 
         [Display(Name = "Taken By")]

@@ -14,7 +14,7 @@ namespace MyStuff.Controllers
     {
         private GalleryContext db = new GalleryContext();
 
-        public ActionResult Index(string filter = null, int page = 1, int pageSize = 20)
+        public ActionResult Index(string filter = null, int page = 1, int pageSize = 10)
         {
             var records = new PagedList<Photo>();
             ViewBag.filter = filter;
@@ -94,7 +94,9 @@ namespace MyStuff.Controllers
                 FileInfo fi = new FileInfo(file.FileName);
                 model.UploadFileName = fi.Name;
                 model.FileName = fi.Name;
-                model.CreatedOn = fi.LastWriteTime;
+                DateTime dtSALDBMin = new DateTime(1753, 1, 1);
+                model.CreatedOn = fi.LastWriteTime > dtSALDBMin ? fi.LastWriteTime : dtSALDBMin;
+                // model.CreatedOn = fi.LastWriteTime;
                 model.TakenBy = Environment.UserName;
 
                 using (var img = System.Drawing.Image.FromStream(file.InputStream))

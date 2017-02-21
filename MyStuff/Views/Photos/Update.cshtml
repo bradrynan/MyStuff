@@ -1,0 +1,150 @@
+﻿@model MyStuff.Models.PagedList<MyStuff.Models.Photo>
+
+@{
+    ViewBag.Title = "Maintain Photos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Styles.Render("~/Content/MyStyles")
+
+<h2>Maintain Photos</h2>
+
+@using (Html.BeginForm("Update", "Photos", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text"
+                       name="filter"
+                       value="@ViewBag.filter"
+                       class="form-control"
+                       style="display: inline"
+                       placeholder="Search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go</button>
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Update", "Photos", FormMethod.Post))
+{
+
+    <p>
+        <input type="submit" value="Save Changes" />
+    </p>
+    <table class="table table-bordered table-bordered">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                File Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                CreatedOn
+            </th>
+            <th>
+                TakenBy
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+
+        @for (int i = 0; i < Model.Content.Count; i++)
+        {
+            <tr>
+
+                <td>
+                    @Html.Hidden("Photos.Index", (@i + 10))
+                    @Html.TextBox("Photos[" + (@i + 10) + "].PhotoId",
+             Model.Content[i].PhotoId, new { @readonly = "readonly" })
+                </td>
+                <td>
+                    @Html.TextArea("Photos[" + (@i + 10) + "].FileName",
+             Model.Content[i].FileName)
+
+                </td>
+                <td>
+                    @Html.TextBox("Photos[" + (@i + 10) + "].Description",
+             Model.Content[i].Description)
+                </td>
+                <td>
+                    @Html.TextBox("Photos[" + (@i + 10) + "].CreatedOn",
+                        Model.Content[i].CreatedOn)
+                    @Html.ValidationMessageFor(model => model.Content[i].CreatedOn, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.TextBox("Photos[" + (@i + 10) + "].TakenBy",
+             Model.Content[i].TakenBy)
+
+                </td>
+                <td>
+                    <a href="@Model.Content[i].ImagePath" title="@Model.Content[i].Description">
+                        <img src="@Model.Content[i].ImagePath" alt="@Model.Content[i].Description" class=".img-thumbnail image-update" />
+                    </a>
+
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.Content[i].PhotoId })
+                </td>
+            </tr>
+        }
+        @*@foreach (var item in Model.Content)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedOn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TakenBy)
+                    </td>
+                    <td>
+                        <a href="@item.ImagePath" title="@item.Description">
+                            <img src="@item.ImagePath" alt="@item.Description" class=".img-thumbnail image-update"  />
+                        </a>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PhotoId })
+                    </td>
+                </tr>
+            }*@
+
+    </table>
+
+    <div>
+        @{
+            var grid = new WebGrid(
+                        canPage: true,
+                        rowsPerPage: Model.PageSize,
+                        canSort: true);
+
+            grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+            grid.Pager(WebGridPagerModes.All);
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" },
+         fillEmptyRows: false,
+         mode: WebGridPagerModes.All,
+         columns: grid.Columns());
+        }
+    </div>
+
+    <p>
+        <input type="submit" value="Save Changes" />
+    </p>
+            }

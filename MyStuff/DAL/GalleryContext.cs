@@ -10,7 +10,7 @@ namespace MyStuff.DAL
     public class GalleryContext : DbContext
     {
         public GalleryContext()
-            : base("DefaultConnection")
+            : base("MyStuff")
         {
             Database.SetInitializer<GalleryContext>
                 (new DropCreateDatabaseIfModelChanges<GalleryContext>());

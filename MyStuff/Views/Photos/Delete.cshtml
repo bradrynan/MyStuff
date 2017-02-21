@@ -1,4 +1,4 @@
-﻿@model MyStuff.Models.Photo
+﻿@model MyStuff.ViewModels.DeletePhotosViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -12,51 +12,51 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UploadFileName)
+            @Html.DisplayNameFor(model => model.Photo.UploadFileName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UploadFileName)
+            @Html.DisplayFor(model => model.Photo.UploadFileName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FileName)
+            @Html.DisplayNameFor(model => model.Photo.FileName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FileName)
+            @Html.DisplayFor(model => model.Photo.FileName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Photo.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Photo.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
+            @Html.DisplayNameFor(model => model.Photo.ImagePath)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ImagePath)
+            @Html.DisplayFor(model => model.Photo.ImagePath)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedOn)
+            @Html.DisplayNameFor(model => model.Photo.CreatedOn)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedOn)
+            @Html.DisplayFor(model => model.Photo.CreatedOn)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TakenBy)
+            @Html.DisplayNameFor(model => model.Photo.TakenBy)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TakenBy)
+            @Html.DisplayFor(model => model.Photo.TakenBy)
         </dd>
 
     </dl>

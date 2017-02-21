@@ -8,6 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using MyStuff.DAL;
 using MyStuff.Models;
+using System.Drawing;
+using System.IO;
+using MyStuff.ViewModels;
 
 namespace MyStuff.Controllers
 {
@@ -15,7 +18,9 @@ namespace MyStuff.Controllers
     {
         private GalleryContext db = new GalleryContext();
 
-        public ActionResult Index(string filter = null, int page = 1, int pageSize = 8)
+        #region Update Photos
+        // Based on Index but will allow updates
+        public ActionResult Update(string filter = null, int page = 1, int pageSize = 8)
         {
             var records = new PagedList<Photo>();
             ViewBag.filter = filter;
@@ -36,6 +41,65 @@ namespace MyStuff.Controllers
 
             return View(records);
         }
+
+        // POST: Photos/Create
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Update(List<Photo> Photos)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (Photo ph in Photos)
+                {
+                    bool saveChanges = false;
+
+                    Photo existingPhoto = db.Photos.Find(ph.PhotoId);
+
+                    if (existingPhoto != null)
+                    {
+                        if (existingPhoto.TakenBy != ph.TakenBy)
+                        {
+                            existingPhoto.TakenBy = ph.TakenBy;
+                            saveChanges = true;
+                        }
+
+                        if (existingPhoto.CreatedOn != ph.CreatedOn)
+                        {
+                            existingPhoto.CreatedOn = ph.CreatedOn;
+                            saveChanges = true;
+                        }
+
+                        if (existingPhoto.Description != ph.Description)
+                        {
+                            existingPhoto.Description = ph.Description;
+                            saveChanges = true;
+                        }
+
+                        if (existingPhoto.FileName != ph.FileName)
+                        {
+                            existingPhoto.FileName = ph.FileName;
+                            saveChanges = true;
+                        }
+                    }
+
+                    if (saveChanges)
+                    {
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            return RedirectToAction("Update");
+        }
+
+        // Show the gallery
+        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 10)
+        {
+            GalleryPhotosViewModel vm = new GalleryPhotosViewModel(filter, page, pageSize);
+
+            return View(vm);
+        }
+        #endregion
 
         // GET: Photos/Details/5
         public ActionResult Details(int? id)
@@ -109,16 +173,9 @@ namespace MyStuff.Controllers
         // GET: Photos/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photo photo = db.Photos.Find(id);
-            if (photo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(photo);
+            DeletePhotosViewModel vm = new DeletePhotosViewModel(id);
+
+            return View(vm);
         }
 
         // POST: Photos/Delete/5
@@ -126,11 +183,41 @@ namespace MyStuff.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Photo photo = db.Photos.Find(id);
-            db.Photos.Remove(photo);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            new DeletePhotosViewModel().DeletePhoto(id);
+
+            return RedirectToAction("Update");
         }
+
+
+        #region Upload Files
+        // Upload
+        [HttpGet]
+        public ActionResult Upload()
+        {
+            UploadPhotosViewModel vm = new UploadPhotosViewModel();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult Upload(UploadPhotosViewModel viewModel, IEnumerable<HttpPostedFileBase> files)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.ErrorMessage = "Model is invalid.";
+                return View(viewModel);
+            }
+
+            viewModel.UploadFiles(files);
+
+            if (!String.IsNullOrEmpty(viewModel.ErrorMessage))
+            {
+                return View(viewModel);
+            }
+
+            return RedirectPermanent("/photos/gallery");
+        }
+        #endregion
 
         protected override void Dispose(bool disposing)
         {
@@ -140,5 +227,6 @@ namespace MyStuff.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

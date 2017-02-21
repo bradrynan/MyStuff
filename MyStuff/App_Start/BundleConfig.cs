@@ -26,6 +26,14 @@ namespace MyStuff
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/MyStyles").Include(
+                      "~/Content/MyStyles.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/MyScripts").Include(
+                       "~/Scripts/MyScripts.js"));
         }
+
+
     }
 }
