@@ -27,11 +27,16 @@ namespace MyStuff
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/MyStyles").Include(
-                      "~/Content/MyStyles.css"));
+            
+            bundles.Add(new StyleBundle("~/Content/UpdatePhotos").Include(
+                      "~/Content/UpdatePhotos.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/MyScripts").Include(
-                       "~/Scripts/MyScripts.js"));
+            bundles.Add(new StyleBundle("~/Content/GalleryPhotos").Include(
+                      "~/Content/GalleryPhotos.css"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/GalleryPhotos").Include(
+                       "~/Scripts/GalleryPhotos.js"));
         }
 
 

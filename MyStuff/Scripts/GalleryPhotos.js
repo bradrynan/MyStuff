@@ -22,9 +22,10 @@
     });
 
 
-    $('.imageDescriptionInGallery').hover(function () {
+    $('.image-gallery').hover(function () {
 
-        var imageDescriptionInGallery = $(this).text();
+        // Parent of image is the <a anchor>. Next is the div
+        var imageDescriptionInGallery = $(this).parent().next().text();
 
         var currentImageDescriptionInGallery = $('#currentImageDescriptionInGallery');
         currentImageDescriptionInGallery.text(imageDescriptionInGallery);
@@ -32,7 +33,7 @@
 
     });
 
-    $('.imageDescriptionInGallery').mouseleave(function () {
+    $('.image-gallery').mouseleave(function () {
 
 
         var currentImageDescriptionInGallery = $('#currentImageDescriptionInGallery');

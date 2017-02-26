@@ -1,0 +1,43 @@
+﻿.image-update {
+    margin-bottom:7px;
+    width: 50px;
+    height: 50px;
+}
+
+.image-update:hover {
+     width: 200px;
+     height: 200px;
+}
+
+.tableCellTextArea,
+.tableCellTextBox {
+    white-space: nowrap;
+    border:none;
+}
+
+.tableCellTextAreaEditable {
+    overflow:hidden;
+    width:20px;
+}
+
+.tableCellTextAreaEditable,
+.tableCellTextBoxEditable {
+    background-color:none;
+    font-family:"Apple Chancery, cursive";
+    font-weight:bold;
+    width:300px;
+}
+
+.tableCellTextBoxSmallCell {
+    width:40px;
+}
+
+.tableCellTextAreaEditable:active,
+.tableCellTextAreaEditable:focus,
+.tableCellTextBoxEditable:active,
+.tableCellTextBoxEditable:focus {
+    font-family:"Apple Chancery, cursive";
+    font-style:italic;
+    font-weight:bold;
+    color:red;
+}

@@ -1,33 +1,20 @@
 ﻿.image-gallery {
-     width: 200px;
-     height: 200px;
-     padding:5px;
-     border-radius: 25px;
+     width: 180px;
+     height: 180px;
+     padding:1px;
+     border-radius:1px;
 }
-
-.image-update {
-    margin-bottom:7px;
-    width: 200px;
-    height: 200px;
-}
-
-/*.image-update:hover {
-     width: 200px;
-     height: 200px;
-}*/
 
 
 .imageDescriptionInGallery {
+    display:none;
     text-align:center;
     color:darkblue;
     width:200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
-
-
 
 #currentImageDescriptionInGallery {
    display:none;

@@ -18,82 +18,33 @@ namespace MyStuff.Controllers
     {
         private GalleryContext db = new GalleryContext();
 
+
         #region Update Photos
         // Based on Index but will allow updates
-        public ActionResult Update(string filter = null, int page = 1, int pageSize = 8)
+        public ActionResult Update(string filter = null, int page = 1, int pageSize = 10)
         {
-            var records = new PagedList<Photo>();
-            ViewBag.filter = filter;
+            UpdatePhotosViewModel vm = new UpdatePhotosViewModel();
+            vm.LoadImages(filter, page, pageSize);
 
-            records.Content = db.Photos
-                        .Where(x => filter == null || (x.Description.Contains(filter)))
-                        .OrderByDescending(x => x.PhotoId)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToList();
-
-            // Count
-            records.TotalRecords = db.Photos
-                            .Where(x => filter == null || (x.Description.Contains(filter))).Count();
-
-            records.CurrentPage = page;
-            records.PageSize = pageSize;
-
-            return View(records);
+            return View(vm);
         }
 
         // POST: Photos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(List<Photo> Photos)
+        public ActionResult Update(List<Photo> Photos, int currentPage)
         {
             if (ModelState.IsValid)
             {
-                foreach (Photo ph in Photos)
-                {
-                    bool saveChanges = false;
-
-                    Photo existingPhoto = db.Photos.Find(ph.PhotoId);
-
-                    if (existingPhoto != null)
-                    {
-                        if (existingPhoto.TakenBy != ph.TakenBy)
-                        {
-                            existingPhoto.TakenBy = ph.TakenBy;
-                            saveChanges = true;
-                        }
-
-                        if (existingPhoto.CreatedOn != ph.CreatedOn)
-                        {
-                            existingPhoto.CreatedOn = ph.CreatedOn;
-                            saveChanges = true;
-                        }
-
-                        if (existingPhoto.Description != ph.Description)
-                        {
-                            existingPhoto.Description = ph.Description;
-                            saveChanges = true;
-                        }
-
-                        if (existingPhoto.FileName != ph.FileName)
-                        {
-                            existingPhoto.FileName = ph.FileName;
-                            saveChanges = true;
-                        }
-                    }
-
-                    if (saveChanges)
-                    {
-                        db.SaveChanges();
-                    }
-                }
+                UpdatePhotosViewModel vm = new UpdatePhotosViewModel();
+                vm.UpdateImages(Photos);
             }
 
-            return RedirectToAction("Update");
+            return RedirectToAction("Update", new { page = currentPage });
         }
 
         // Show the gallery
-        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 10)
+        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 12)
         {
             GalleryPhotosViewModel vm = new GalleryPhotosViewModel(filter, page, pageSize);
 

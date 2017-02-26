@@ -1,11 +1,11 @@
-﻿@model MyStuff.Models.PagedList<MyStuff.Models.Photo>
+﻿@model MyStuff.ViewModels.UpdatePhotosViewModel
 
 @{
     ViewBag.Title = "Maintain Photos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Styles.Render("~/Content/MyStyles")
+@Styles.Render("~/Content/UpdatePhotos")
 
 <h2>Maintain Photos</h2>
 
@@ -32,10 +32,9 @@
 {
     @Html.AntiForgeryToken()
 
-    <p>
-        <input type="submit" value="Save Changes" />
-    </p>
-    <table class="table table-bordered table-bordered">
+    @Html.Hidden("currentPage", Model.Images.CurrentPage)
+
+    <table class="table table-bordered table-striped">
         <tr>
             <th>
                 ID
@@ -60,82 +59,58 @@
             </th>
         </tr>
 
-        @for (int i = 0; i < Model.Content.Count; i++)
+        @for (int i = 0; i < Model.Images.Content.Count; i++)
         {
             <tr>
 
                 <td>
                     @Html.Hidden("Photos.Index", (@i + 10))
                     @Html.TextBox("Photos[" + (@i + 10) + "].PhotoId",
-             Model.Content[i].PhotoId, new { @readonly = "readonly" })
+             Model.Images.Content[i].PhotoId, new { @readonly = "readonly", @class = "tableCellTextBox tableCellTextBoxSmallCell"} )
                 </td>
                 <td>
-                    @Html.TextArea("Photos[" + (@i + 10) + "].FileName",
-             Model.Content[i].FileName)
+                    @Html.TextBox("Photos[" + (@i + 10) + "].FileName",
+             Model.Images.Content[i].FileName, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
 
                 </td>
                 <td>
-                    @Html.TextBox("Photos[" + (@i + 10) + "].Description",
-             Model.Content[i].Description)
+                    @Html.TextArea("Photos[" + (@i + 10) + "].Description",
+             Model.Images.Content[i].Description, new { @class = "tableCellTextArea tableCellTextAreaEditable" })
                 </td>
                 <td>
                     @Html.TextBox("Photos[" + (@i + 10) + "].CreatedOn",
-                        Model.Content[i].CreatedOn)
-                    @Html.ValidationMessageFor(model => model.Content[i].CreatedOn, "", new { @class = "text-danger" })
+                        Model.Images.Content[i].CreatedOn, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
+                    @Html.ValidationMessageFor(model => model.Images.Content[i].CreatedOn, "", new { @class = "text-danger" })
 
                 </td>
                 <td>
                     @Html.TextBox("Photos[" + (@i + 10) + "].TakenBy",
-             Model.Content[i].TakenBy)
+             Model.Images.Content[i].TakenBy, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
 
                 </td>
                 <td>
-                    <a href="@Model.Content[i].ImagePath" title="@Model.Content[i].Description">
-                        <img src="@Model.Content[i].ImagePath" alt="@Model.Content[i].Description" class=".img-thumbnail image-update" />
+                    <a href="@Model.Images.Content[i].ImagePath" title="@Model.Images.Content[i].Description">
+                        <img src="@Model.Images.Content[i].ImagePath" alt="@Model.Images.Content[i].Description" class=".img-thumbnail image-update" />
                     </a>
 
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { photoId = Model.Content[i].PhotoId })
+                    @Html.ActionLink("Delete", "Delete", new { photoId = Model.Images.Content[i].PhotoId })
                 </td>
             </tr>
         }
-        @*@foreach (var item in Model.Content)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FileName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedOn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TakenBy)
-                    </td>
-                    <td>
-                        <a href="@item.ImagePath" title="@item.Description">
-                            <img src="@item.ImagePath" alt="@item.Description" class=".img-thumbnail image-update"  />
-                        </a>
-                    </td>
-                    <td>
-                        @Html.ActionLink("Delete", "Delete", new { id = item.PhotoId })
-                    </td>
-                </tr>
-            }*@
 
     </table>
+
 
     <div>
         @{
             var grid = new WebGrid(
                         canPage: true,
-                        rowsPerPage: Model.PageSize,
+                        rowsPerPage: Model.Images.PageSize,
                         canSort: true);
 
-            grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+            grid.Bind(Model.Images.Content, rowCount: Model.Images.TotalRecords, autoSortAndPage: false);
             grid.Pager(WebGridPagerModes.All);
 
             @grid.GetHtml(htmlAttributes: new { id = "grid" },
@@ -148,4 +123,5 @@
     <p>
         <input type="submit" value="Save Changes" />
     </p>
-            }
+
+            } @* @using (Html.BeginForm("Update", "Photos", FormMethod.Post)) *@
