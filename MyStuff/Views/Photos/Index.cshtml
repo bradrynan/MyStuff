@@ -1,0 +1,121 @@
+﻿@model MyStuff.Models.PagedList<MyStuff.Models.Photo>
+
+@{
+    ViewBag.Title = "Maintain Photos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Maintain Photos</h2>
+
+@using (Html.BeginForm("index", null, FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text"
+                       name="filter"
+                       value="@ViewBag.filter"
+                       class="form-control"
+                       style="display: inline"
+                       placeholder="Search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go</button>
+                </span>
+            </div>
+        </div>
+        <div class="pull-right col-lg-1">
+            <a class="btn btn-success" data-modal="" href="/home/create" id="btnCreate">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        </div>
+    </div>
+
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>
+                Upload File Name
+            </th>
+            <th>
+                File Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                ImagePath
+            </th>
+            <th>
+                CreatedOn
+            </th>
+            <th>
+                TakenBy
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Action
+            </th>
+            <th>
+                Select
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Content)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UploadFileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TakenBy)
+                </td>
+                <td>
+                    <a href="@item.ImagePath" title="@item.Description">
+                        <img src="@item.ImagePath" alt="@item.Description" class=".img-thumbnail" style="margin-bottom:7px;" width="50" height="50" />
+                    </a>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PhotoId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.PhotoId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PhotoId })
+                </td>
+                <td>
+                    <input type="checkbox" />
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div>
+        <br />
+        @{
+            var grid = new WebGrid(
+                        canPage: true,
+                        rowsPerPage: Model.PageSize,
+                        canSort: true);
+
+            grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+            grid.Pager(WebGridPagerModes.All);
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" },
+            fillEmptyRows: false,
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns());
+        }
+    </div>
+            }

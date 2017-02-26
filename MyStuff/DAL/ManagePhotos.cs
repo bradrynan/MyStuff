@@ -6,12 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
+using Microsoft.Azure; // Namespace for CloudConfigurationManager
+using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
+using Microsoft.WindowsAzure.Storage.Blob; // Namespace for Blob storage types
 
 namespace MyStuff.DAL
 {
     public class ManagePhotos
     {
         private GalleryContext db = new GalleryContext();
+
+
 
         public string GetFileName(Photo ph)
         {
@@ -26,27 +31,29 @@ namespace MyStuff.DAL
 
         }
 
-        public void AddPhoto(Photo ph, HttpPostedFileBase file)
+        public void AddPhoto(Photo ph, string fileNamePrefix, HttpPostedFileBase file)
         {
             var newPhoto = new Photo();
 
             newPhoto.Description = ph.Description;
-            var fileName = Guid.NewGuid().ToString();
-            var extension = System.IO.Path.GetExtension(file.FileName).ToLower();
-            FileInfo fi = new FileInfo(file.FileName);
-            newPhoto.UploadFileName = fi.Name;
-            newPhoto.FileName = fi.Name;
+
+            newPhoto.UploadFileName = String.IsNullOrEmpty(fileNamePrefix) ? file.FileName : fileNamePrefix + "_" + file.FileName;
+            newPhoto.FileName = newPhoto.UploadFileName;
+
             DateTime dtSALDBMin = new DateTime(1753, 1, 1);
-            newPhoto.CreatedOn = fi.LastWriteTime > dtSALDBMin ? fi.LastWriteTime : DateTime.Now;
-            // model.CreatedOn = fi.LastWriteTime;
-            newPhoto.TakenBy = Environment.UserName;
+            newPhoto.CreatedOn = ph.CreatedOn > dtSALDBMin ? ph.CreatedOn : DateTime.Now;
 
-            using (var img = System.Drawing.Image.FromStream(file.InputStream))
+            newPhoto.TakenBy = String.IsNullOrEmpty(newPhoto.TakenBy) ?Environment.UserName: newPhoto.TakenBy;
+
+            string storeModeCloud = System.Web.Configuration.WebConfigurationManager.AppSettings["StorageModeCloud"];
+
+            if (storeModeCloud == "false")
             {
-                newPhoto.ImagePath = String.Format("/GalleryImages/{0}{1}", fileName, extension);
-
-                // Save large size image, 800 x 800
-                SaveToFolder(img, fileName, extension, new Size(800, 800), newPhoto.ImagePath);
+                SaveImageLocal(file, fileNamePrefix, newPhoto);
+            }
+            else
+            {
+                SaveImageCloud(file, newPhoto);
             }
 
             // Save record to database
@@ -64,35 +71,47 @@ namespace MyStuff.DAL
 
         }
 
-        private Size NewImageSize(Size imageSize, Size newSize)
+        private void SaveImageLocal(HttpPostedFileBase file, string fileNamePrefix, Photo photo)
         {
-            Size finalSize;
-            double tempval;
-            if (imageSize.Height > newSize.Height || imageSize.Width > newSize.Width)
+            var fileName = String.IsNullOrEmpty(fileNamePrefix) ? Guid.NewGuid().ToString() : fileNamePrefix + "_" + Guid.NewGuid().ToString();
+            var extension = System.IO.Path.GetExtension(file.FileName).ToLower();
+
+            using (var img = System.Drawing.Image.FromStream(file.InputStream))
             {
-                if (imageSize.Height > imageSize.Width)
-                    tempval = newSize.Height / (imageSize.Height * 1.0);
-                else
-                    tempval = newSize.Width / (imageSize.Width * 1.0);
+                photo.ImagePath = String.Format("/GalleryImages/{0}{1}", fileName, extension);
 
-                finalSize = new Size((int)(tempval * imageSize.Width), (int)(tempval * imageSize.Height));
-            }
-            else
-                finalSize = imageSize; // image is already small size
-
-            return finalSize;
-        }
-
-        private void SaveToFolder(Image img, string fileName, string extension, Size newSize, string pathToSave)
-        {
-            // Get new resolution
-            Size imgSize = NewImageSize(img.Size, newSize);
-            using (System.Drawing.Image newImg = new Bitmap(img, imgSize.Width, imgSize.Height))
-            {
-                newImg.Save(HostingEnvironment.MapPath(pathToSave), img.RawFormat);
+                using (System.Drawing.Image newImg = new Bitmap(img, img.Width, img.Height))
+                {
+                    newImg.Save(HostingEnvironment.MapPath(photo.ImagePath), img.RawFormat);
+                }
             }
         }
+
+
+        private void SaveImageCloud(HttpPostedFileBase file, Photo photo)
+        {
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+               CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            CloudBlobContainer container = blobClient.GetContainerReference("managemystuffphotos");
+
+            // Retrieve reference to a blob named "photo1.jpg".
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(file.FileName);
+
+            photo.ImagePath = blockBlob.Uri.ToString();
+
+            // Create or overwrite the "myblob" blob with contents from a local file.
+            using (var fileStream = file.InputStream)
+            {
+                blockBlob.UploadFromStream(fileStream);
+            }
+
+            // blockBlob.DownloadToStream(file.InputStream);
+        }       
     }
-
-
 }

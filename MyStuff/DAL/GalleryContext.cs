@@ -10,11 +10,16 @@ namespace MyStuff.DAL
     public class GalleryContext : DbContext
     {
         public GalleryContext()
-            : base("MyStuff")
+            : base("ManageMyStuffContext")
         {
-            Database.SetInitializer<GalleryContext>
-                (new DropCreateDatabaseIfModelChanges<GalleryContext>());
         }
+
+        //public GalleryContext()
+        //  : base("MyStuff")
+        //{
+        //    Database.SetInitializer<GalleryContext>
+        //        (new DropCreateDatabaseIfModelChanges<GalleryContext>());
+        //}
 
         public DbSet<Photo> Photos { get; set; }
     }

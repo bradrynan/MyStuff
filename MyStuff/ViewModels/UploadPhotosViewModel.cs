@@ -2,6 +2,7 @@
 using MyStuff.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace MyStuff.ViewModels
     {
         private GalleryContext db = new GalleryContext();
         public string  ErrorMessage { get; set; }
+
+        [Display(Name = "File Name Prefix")]
+        public string FileNamePrefix { get; set; }
+
         public Photo Photo { get; set; }
 
         public UploadPhotosViewModel()
@@ -22,6 +27,7 @@ namespace MyStuff.ViewModels
 
             Photo.CreatedOn = DateTime.Today;
             Photo.Description = "UPLOAD";
+            Photo.TakenBy = Environment.UserName;
         }
 
         public void UploadFiles(IEnumerable<HttpPostedFileBase> files)
@@ -29,19 +35,15 @@ namespace MyStuff.ViewModels
             if (!IsValid(files))
                 return;
 
-            UploadFiles(this.Photo, files);
-        }
-
-        private void UploadFiles(Photo photo, IEnumerable<HttpPostedFileBase> files)
-        {
             ManagePhotos managePhotos = new ManagePhotos();
             foreach (var file in files)
             {
                 if (file.ContentLength == 0) continue;
 
-                managePhotos.AddPhoto(photo, file); 
+                managePhotos.AddPhoto(Photo, FileNamePrefix, file);
             }
         }
+
         private bool IsValid(IEnumerable<HttpPostedFileBase> files)
         {
             if (files.Count() == 0 || files.FirstOrDefault() == null)

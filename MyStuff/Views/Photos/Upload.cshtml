@@ -30,13 +30,27 @@
                 </div>
             </div>
 
-            @*<div class="form-group">
+            <div class="form-group">
                 @Html.LabelFor(m => Model.Photo.CreatedOn, new { @class = "control-label col-sm-3" })
                 <div class="col-sm-5">
-                    @Html.TextBoxFor(model => model.Photo.CreatedOn, new { @class = "form-control required", @Value = Model.Photo.CreatedOn.ToString("dd/MM/yyyy") })
+                    @Html.EditorFor(model => model.Photo.CreatedOn, new { @class = "form-control required", @Value = Model.Photo.CreatedOn.ToString("dd/MM/yyyy") })
                     @Html.ValidationMessageFor(model => model.Photo.CreatedOn)
                 </div>
-            </div>*@
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => Model.Photo.TakenBy, new { @class = "control-label col-sm-3" })
+                <div class="col-sm-5">
+                    @Html.TextBoxFor(model => model.Photo.TakenBy, new { @class = "form-control", @Value = Model.Photo.TakenBy })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => Model.FileNamePrefix, new { @class = "control-label col-sm-3" })
+                <div class="col-sm-5">
+                    @Html.TextBoxFor(model => model.FileNamePrefix, new { @class = "form-control", @Value = Model.FileNamePrefix })
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-sm-5 col-sm-offset-3">

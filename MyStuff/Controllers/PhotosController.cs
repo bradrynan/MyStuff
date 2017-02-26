@@ -18,6 +18,27 @@ namespace MyStuff.Controllers
     {
         private GalleryContext db = new GalleryContext();
 
+        public ActionResult Index(string filter = null, int page = 1, int pageSize = 8)
+        {
+            var records = new PagedList<Photo>();
+            ViewBag.filter = filter;
+
+            records.Content = db.Photos
+                        .Where(x => filter == null || (x.Description.Contains(filter)))
+                        .OrderByDescending(x => x.PhotoId)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+
+            // Count
+            records.TotalRecords = db.Photos
+                            .Where(x => filter == null || (x.Description.Contains(filter))).Count();
+
+            records.CurrentPage = page;
+            records.PageSize = pageSize;
+
+            return View(records);
+        }
 
         #region Update Photos
         // Based on Index but will allow updates
@@ -44,7 +65,7 @@ namespace MyStuff.Controllers
         }
 
         // Show the gallery
-        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 12)
+        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 18)
         {
             GalleryPhotosViewModel vm = new GalleryPhotosViewModel(filter, page, pageSize);
 
@@ -64,29 +85,6 @@ namespace MyStuff.Controllers
             {
                 return HttpNotFound();
             }
-            return View(photo);
-        }
-
-        // GET: Photos/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Photos/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PhotoId,UploadFileName,FileName,Description,ImagePath,CreatedOn,TakenBy")] Photo photo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Photos.Add(photo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
             return View(photo);
         }
 
