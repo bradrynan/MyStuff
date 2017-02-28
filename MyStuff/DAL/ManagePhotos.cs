@@ -31,6 +31,23 @@ namespace MyStuff.DAL
 
         }
 
+        public Photo GetPhoto(int? photoId)
+        {
+            if (photoId == null)
+            {
+                throw new ArgumentException("Photo id not supplied");
+            }
+
+            Photo Photo = db.Photos.Find(photoId);
+            if (Photo == null)
+            {
+                throw new ArgumentException("Photo not found for id:" + photoId);
+            }
+
+            return Photo;
+
+        }
+
         public void AddPhoto(Photo ph, string fileNamePrefix, HttpPostedFileBase file)
         {
             var newPhoto = new Photo();
@@ -61,9 +78,55 @@ namespace MyStuff.DAL
             db.SaveChanges();
         }
 
-        public void DeletePhoto(Photo ph)
+        public void DeletePhoto(int? photoId)
         {
+            Photo ph = GetPhoto(photoId);
 
+            string storeModeCloud = System.Web.Configuration.WebConfigurationManager.AppSettings["StorageModeCloud"];
+
+            if (storeModeCloud == "false")
+            {
+                DeleteImageLocal(ph);
+            }
+            else
+            {
+                DeleteImageCloud(ph);
+            }
+
+            db.Photos.Remove(ph);
+            db.SaveChanges();
+        }
+
+        private void DeleteImageLocal(Photo ph)
+        {
+            string imagePath = HostingEnvironment.MapPath(ph.ImagePath);
+
+            FileInfo fi = new FileInfo(imagePath);
+            if (fi.Exists)
+            {
+                fi.Delete();
+            }
+        }
+
+        private void DeleteImageCloud(Photo ph)
+        {
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+               CloudConfigurationManager.GetSetting("AzureStorageConnectionString"));
+
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            CloudBlobContainer container = blobClient.GetContainerReference("managemystuffphotos");
+
+            // Retrieve reference to a blob named "photo1.jpg".
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(ph.UploadFileName);
+
+            if (blockBlob.Exists())
+            {
+                blockBlob.DeleteIfExists();
+            }
         }
 
         public void UpdatePhoto(Photo ph)
@@ -92,7 +155,7 @@ namespace MyStuff.DAL
         {
             // Retrieve storage account from connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
-               CloudConfigurationManager.GetSetting("StorageConnectionString"));
+               CloudConfigurationManager.GetSetting("AzureStorageConnectionString"));
 
             // Create the blob client.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
@@ -112,6 +175,6 @@ namespace MyStuff.DAL
             }
 
             // blockBlob.DownloadToStream(file.InputStream);
-        }       
+        }
     }
 }

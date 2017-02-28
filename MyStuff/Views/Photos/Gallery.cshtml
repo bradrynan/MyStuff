@@ -12,12 +12,12 @@
 
 @using (Html.BeginForm("Gallery", null, FormMethod.Get))
 {
-    <div class="row">
-        <div class="col-sm-8">
+      <div class="row">
+        <div class="col-sm-4">
             <div class="input-group">
                 <input type="text"
                        name="filter"
-                       value="@Model.Filter"
+                       value="@ViewBag.filter"
                        class="form-control"
                        style="display: inline"
                        placeholder="Search" />
@@ -26,8 +26,8 @@
                 </span>
             </div>
         </div>
-        <div class="pull-right col-lg-1">
-            <a class="btn btn-success" data-modal="" href="/Photos/Upload" id="btnCreate">
+        <div class="pull-right col-lg-1" style="padding-right:120px;">
+            <a class="btn btn-success" data-modal="" href="/home/create" id="btnCreate">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
         </div>
@@ -88,6 +88,7 @@
 
         <div id="currentImageDescriptionInGallery">Nothing</div>
 
+        <hr />
         @{
             var grid = new WebGrid(
                         canPage: true,

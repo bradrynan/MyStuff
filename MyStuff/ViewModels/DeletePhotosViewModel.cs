@@ -9,6 +9,8 @@ namespace MyStuff.ViewModels
 {
     public class DeletePhotosViewModel
     {
+        ManagePhotos manPhoto = new ManagePhotos();
+
         private GalleryContext db = new GalleryContext();
         public string ErrorMessage { get; set; }
         public Photo Photo { get; set; }
@@ -19,34 +21,12 @@ namespace MyStuff.ViewModels
 
         public DeletePhotosViewModel(int? photoId)
         {
-            ValidatePhotoID(photoId);
-
-            GetPhoto(photoId);
+            Photo = manPhoto.GetPhoto(photoId);
         }
 
-        public void DeletePhoto(int id)
+        public void DeletePhoto(int photoId)
         {
-            GetPhoto(id);
-            db.Photos.Remove(Photo);
-            db.SaveChanges();
-        }
-
-        private void ValidatePhotoID(int? photoId)
-        {
-            if (photoId == null)
-            {
-                throw new ArgumentException("Photo id not supplied");
-            }
-        }
-
-        private void GetPhoto(int? photoId)
-        {
-            Photo = db.Photos.Find(photoId);
-            if (Photo == null)
-            {
-                throw new ArgumentException("Photo not found for id:" + photoId);
-            }
-
+            manPhoto.DeletePhoto(photoId);           
         }
     }
 }

@@ -4,6 +4,14 @@
     height: 50px;
 }
 
+.panel {
+    overflow: auto;
+}
+
+/*td {
+    word-break: break-all;
+}*/
+
 .image-update:hover {
      width: 200px;
      height: 200px;
@@ -25,7 +33,7 @@
     background-color:none;
     font-family:"Apple Chancery, cursive";
     font-weight:bold;
-    width:300px;
+    width:220px;
 }
 
 .tableCellTextBoxSmallCell {

@@ -290,6 +290,8 @@
     </Content>
     <Content Include="Content\blueimp-gallery.min.css.map" />
     <None Include="Properties\PublishProfiles\BradRynanGitSample - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MyStuff.pubxml" />
+    <None Include="Properties\PublishProfiles\MyStuff2017 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
