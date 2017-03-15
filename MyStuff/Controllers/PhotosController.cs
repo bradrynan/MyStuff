@@ -53,12 +53,21 @@ namespace MyStuff.Controllers
         // POST: Photos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(List<Photo> Photos, int currentPage)
+        public ActionResult Update(List<Photo> Photos, int currentPage, bool deleteFiles = false)
         {
             if (ModelState.IsValid)
             {
                 UpdatePhotosViewModel vm = new UpdatePhotosViewModel();
-                vm.UpdateImages(Photos);
+
+                if (!deleteFiles)
+                {
+                    vm.UpdateImages(Photos);
+                }
+                else
+                {
+                    vm.DeleteImages(Photos);
+                    currentPage = 1;
+                }
             }
 
             return RedirectToAction("Update", new { page = currentPage });
@@ -152,18 +161,18 @@ namespace MyStuff.Controllers
         [HttpPost]
         public ActionResult Upload(UploadPhotosViewModel viewModel, IEnumerable<HttpPostedFileBase> files)
         {
-            if (!ModelState.IsValid)
-            {
-                viewModel.ErrorMessage = "Model is invalid.";
-                return View(viewModel);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    viewModel.ErrorMessage = "Model is invalid.";
+            //    return View(viewModel);
+            //}
 
-            viewModel.UploadFiles(files);
+            //viewModel.UploadFiles(files);
 
-            if (!String.IsNullOrEmpty(viewModel.ErrorMessage))
-            {
-                return View(viewModel);
-            }
+            //if (!String.IsNullOrEmpty(viewModel.ErrorMessage))
+            //{
+            //    return View(viewModel);
+            //}
 
             return RedirectPermanent("/photos/gallery");
         }
@@ -176,6 +185,74 @@ namespace MyStuff.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            UploadPhotosViewModel viewModel = new UploadPhotosViewModel();
+
+            // Checking no of files injected in Request object
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        HttpPostedFileBase file = Request.Files[i];
+                        var lastModifiedDate = Request.Form.Get(file.FileName);
+
+                        viewModel.UploadFile(file, lastModifiedDate);
+                    }
+
+                    // Returns message that successfully uploaded
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    return Json("Error occurred. Error details: " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFiles()
+        {
+            UploadPhotosViewModel viewModel = new UploadPhotosViewModel();
+
+            // Checking no of files injected in Request object
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+
+                        HttpPostedFileBase file = files[i];
+
+                        var lastModified = Request.Form.Get(file.FileName);
+
+                        viewModel.UploadFile(file, lastModified);
+                    }
+
+                    // Returns message that successfully uploaded
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    return Json("Error occurred. Error details: " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
         }
 
     }

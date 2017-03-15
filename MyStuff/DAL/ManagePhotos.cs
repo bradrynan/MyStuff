@@ -58,7 +58,10 @@ namespace MyStuff.DAL
             newPhoto.FileName = newPhoto.UploadFileName;
 
             DateTime dtSALDBMin = new DateTime(1753, 1, 1);
-            newPhoto.CreatedOn = ph.CreatedOn > dtSALDBMin ? ph.CreatedOn : DateTime.Now;
+            newPhoto.DateTaken = ph.DateTaken > dtSALDBMin ? ph.DateTaken : DateTime.Now;
+
+            newPhoto.DateUploaded = DateTime.Now;
+            newPhoto.UploadedBy = "BRAD";
 
             newPhoto.TakenBy = String.IsNullOrEmpty(newPhoto.TakenBy) ?Environment.UserName: newPhoto.TakenBy;
 
@@ -104,7 +107,16 @@ namespace MyStuff.DAL
             FileInfo fi = new FileInfo(imagePath);
             if (fi.Exists)
             {
-                fi.Delete();
+                try
+                {
+                    fi.Delete();
+                }
+                catch (Exception)
+                {
+                    // Do nothing - sometimes the images are still being loaded and you get an error.
+                    // Just ignore and leave the orphan image on the server.
+                    // Maybe write a cleanup job at a later stage.
+                }
             }
         }
 

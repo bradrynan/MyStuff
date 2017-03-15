@@ -10,6 +10,7 @@ namespace MyStuff.ViewModels
     public class UpdatePhotosViewModel
     {
         private GalleryContext db = new GalleryContext();
+        private ManagePhotos managePhotos = new ManagePhotos();
 
         public PagedList<Photo> Images { get; set; }
 
@@ -19,8 +20,26 @@ namespace MyStuff.ViewModels
         {
         }
 
+        public void DeleteImages(List<Photo> Photos)
+        {
+            if (Photos == null)
+            {
+                return;
+            }
+
+            foreach (Photo ph in Photos)
+            {
+                managePhotos.DeletePhoto(ph.PhotoId);
+            }
+        }
+
         public void UpdateImages(List<Photo> Photos)
         {
+            if (Photos == null)
+            {
+                return;
+            }
+
             foreach (Photo ph in Photos)
             {
                 bool saveChanges = false;
@@ -35,9 +54,9 @@ namespace MyStuff.ViewModels
                         saveChanges = true;
                     }
 
-                    if (existingPhoto.CreatedOn != ph.CreatedOn)
+                    if (existingPhoto.DateUploaded != ph.DateUploaded)
                     {
-                        existingPhoto.CreatedOn = ph.CreatedOn;
+                        existingPhoto.DateUploaded = ph.DateUploaded;
                         saveChanges = true;
                     }
 

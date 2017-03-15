@@ -25,34 +25,36 @@ namespace MyStuff.ViewModels
         {
             Photo = new Photo();
 
-            Photo.CreatedOn = DateTime.Today;
+            Photo.DateUploaded = DateTime.Now;
             Photo.Description = "UPLOAD";
             Photo.TakenBy = Environment.UserName;
         }
 
-        public void UploadFiles(IEnumerable<HttpPostedFileBase> files)
+        public void UploadFile(HttpPostedFileBase file, string lastModifiedDateTicks)
         {
-            if (!IsValid(files))
+            if ((file == null) || (file.ContentLength == 0))
+            {
                 return;
+            }
+
+            // Set the last modified date based on milliseconds (ticks) since epoch.
+            try
+            {
+                long ticks = Convert.ToInt64(lastModifiedDateTicks);
+
+                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                var lastModifiedDate = epoch.AddMilliseconds(ticks);
+
+                Photo.DateTaken = lastModifiedDate.ToLocalTime();
+            }
+            catch (Exception)
+            {
+                Photo.DateTaken = DateTime.Now.ToLocalTime();
+            }
 
             ManagePhotos managePhotos = new ManagePhotos();
-            foreach (var file in files)
-            {
-                if (file.ContentLength == 0) continue;
 
-                managePhotos.AddPhoto(Photo, FileNamePrefix, file);
-            }
-        }
-
-        private bool IsValid(IEnumerable<HttpPostedFileBase> files)
-        {
-            if (files.Count() == 0 || files.FirstOrDefault() == null)
-            {
-                ErrorMessage = "Please choose a file";
-                return false;
-            }
-
-            return true;
+            managePhotos.AddPhoto(Photo, FileNamePrefix, file);
         }
     }
 }

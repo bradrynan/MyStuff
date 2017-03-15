@@ -89,9 +89,9 @@
              Model.Images.Content[i].Description, new { @class = "tableCellTextArea tableCellTextAreaEditable" })
                                     </td>
                                     <td>
-                                        @Html.TextBox("Photos[" + (@i + 10) + "].CreatedOn",
-                        Model.Images.Content[i].CreatedOn, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
-                                        @Html.ValidationMessageFor(model => model.Images.Content[i].CreatedOn, "", new { @class = "text-danger" })
+                                        @Html.TextBox("Photos[" + (@i + 10) + "].DateTaken",
+                        Model.Images.Content[i].DateTaken, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
+                                        @Html.ValidationMessageFor(model => model.Images.Content[i].DateTaken, "", new { @class = "text-danger" })
 
                                     </td>
                                     <td>
@@ -141,5 +141,8 @@
         <p>
             <input type="submit" value="Save Changes" />
         </p>
+        <p>
+            <input type="checkbox" name="deleteFiles" value="True"> Delete All Files Listed<br>
+        </p>
 
-        } @* @using (Html.BeginForm("Update", "Photos", FormMethod.Post)) *@
+            } @* @using (Html.BeginForm("Update", "Photos", FormMethod.Post)) *@

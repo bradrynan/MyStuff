@@ -10,7 +10,6 @@ namespace MyStuff.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "MyStuff.DAL.GalleryContext";
         }
 
         protected override void Seed(MyStuff.DAL.GalleryContext context)

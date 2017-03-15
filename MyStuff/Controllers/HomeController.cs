@@ -95,7 +95,7 @@ namespace MyStuff.Controllers
                 model.UploadFileName = fi.Name;
                 model.FileName = fi.Name;
                 DateTime dtSALDBMin = new DateTime(1753, 1, 1);
-                model.CreatedOn = fi.LastWriteTime > dtSALDBMin ? fi.LastWriteTime : dtSALDBMin;
+                model.DateUploaded = fi.LastWriteTime > dtSALDBMin ? fi.LastWriteTime : dtSALDBMin;
                 // model.CreatedOn = fi.LastWriteTime;
                 model.TakenBy = Environment.UserName;
 

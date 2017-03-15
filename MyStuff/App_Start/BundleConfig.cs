@@ -23,11 +23,15 @@ namespace MyStuff
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootbox").Include(
+                       "~/Scripts/bootbox.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                       "~/Content/font-awesome.min.css",
                       "~/Content/site.css"));
 
-            
+
             bundles.Add(new StyleBundle("~/Content/UpdatePhotos").Include(
                       "~/Content/UpdatePhotos.css"));
 

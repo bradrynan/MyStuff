@@ -5,10 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+
 <h2>Upload Images</h2>
 <div class="well">
-    @using (Html.BeginForm("Upload", "Photos", FormMethod.Post, new {id = "formID", enctype = "multipart/form-data" }))
-    {
+    @*@using (Html.BeginForm("Upload", null, FormMethod.Get))
+    {*@
+        @*@using (Html.BeginForm("Upload", "Photos", FormMethod.Post, new { id = "formID", enctype = "multipart/form-data" }))*@
+
 
         @Html.AntiForgeryToken()
 
@@ -17,7 +21,7 @@
             <div class="form-group">
                 @Html.Label("Choose Image(s)", new { @class = "control-label col-sm-3" })
                 <div class="col-sm-5">
-                    <input type="file" name="files"
+                    <input type="file" name="files" id="FileUpload"
                            multiple="multiple" accept=".jpg, .png, .gif" />
                 </div>
             </div>
@@ -27,14 +31,6 @@
                 <div class="col-sm-5">
                     @Html.TextBoxFor(model => model.Photo.Description, new { @class = "form-control required", @Value = Model.Photo.Description })
                     @Html.ValidationMessageFor(model => model.Photo.Description)
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(m => Model.Photo.CreatedOn, new { @class = "control-label col-sm-3" })
-                <div class="col-sm-5">
-                    @Html.EditorFor(model => model.Photo.CreatedOn, new { @class = "form-control required", @Value = Model.Photo.CreatedOn.ToString("dd/MM/yyyy") })
-                    @Html.ValidationMessageFor(model => model.Photo.CreatedOn)
                 </div>
             </div>
 
@@ -54,39 +50,135 @@
 
             <div class="form-group">
                 <div class="col-sm-5 col-sm-offset-3">
-                    <input id="uploadImagesButton" type="submit" value="Save" class="btn btn-primary" />
+                    <input id="uploadImagesButton" type="submit" value="Save" class="btn btn-primary" data-toggle="modal" data-target=".uploadfilesModal"/>
                     <div style="color:#ff0000">
                         @Model.ErrorMessage
                     </div>
                 </div>
             </div>
         </div>
-    }
+    @*}*@
 </div>
 
-<div id="loadingImages">
-    <div id="loadingImagesCont">
-        <p id="loadingImagesSpinr">
-            Files Loading. Please wait...
-        </p>
+<div class="modal uploadfilesModal" data-keyboard="false" data-backdrop="static" >
+
+    <div class="modal-dialog" style="background-color:black" >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+                    <h3 id='loadFilesModelHeader'>Loading Files...</h3>
+                </div>
+            </div>
+
+            <div class="modal-body" >
+                <p id="modalBody"><i class="fa fa-spin fa-spinner"></i> <span id='loadingFilesModalBody'Loading files...</span></p>
+            </div>
+
+            <div class="modal-footer">
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        0%
+                    </div>
+                </div>
+                <button id="closeDialogButton" data-dismiss="modal" class="btn btn-success" style="width:100%">Done</button>
+            </div>
+        </div>
+
     </div>
+
 </div>
-
-
 
 
 
 @section Scripts {
 @Scripts.Render("~/bundles/jqueryval")
-@Scripts.Render("~/bundles/MyScripts")
-@Styles.Render("~/Content/MyStyles")
+@Scripts.Render("~/bundles/bootbox")
+
+<script>
+
+    $(document).ready(function () {
+
+    $('#uploadImagesButton').click(function () {
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $("#FileUpload").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+            var numberOfFilesToLoad = files.length;
+
+            $('#loadFilesModelHeader').html('Number of files to load:' + numberOfFilesToLoad);
+            $('#loadingFilesModalBody').html('Loading files...');
+
+            $('#closeDialogButton').hide();
+
+            for (var i = 0; i < files.length; i++)
+            {
+                fileData.append("Files", files[i]);
+                fileData.append(files[i].name, files[i].lastModified);
+            }
+
+            // Looping over all files and add it to FormData object
+            $.ajax({
+                xhr: function()
+                {
+                    var xhr = new window.XMLHttpRequest();
+                    //Upload progress
+                    xhr.upload.addEventListener("progress", function(evt){
+                        if (evt.lengthComputable) {
+                            var percentComplete = Math.round( (evt.loaded / evt.total)*100);
+                            //Do something with upload progress
+                            console.log(percentComplete);
+                            $('#progress-bar').attr('aria-valuenow', percentComplete).css('width', percentComplete + '%').text(percentComplete + '%');
+
+                        }
+                    }, false);
+
+                    return xhr;
+                },
+                url: '/Photos/UploadFiles',
+                type: "POST",
+                // async: false,
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    console.log(result);
+                    // alert(result);
+                },
+                error: function (err) {
+                    console.log(err.statusText);
+                    console.log(err);
+                },
+                complete: function () {
+                    //back to normal!
+                    $('#loadFilesModelHeader').html('Loading files complete.');
+                    $('#modalBody').hide();
+                    $('#closeDialogButton').fadeIn(2000);
+                }
+            });
+
+        } else {
+            alert("FormData is not supported.");
+        }
+
+        //window.location = '/Photos/Gallery/';
+    });
+
+    function sleepFor(sleepDuration) {
+        var now = new Date().getTime();
+        while (new Date().getTime() < now + sleepDuration) { /* do nothing */ }
+    }
+});
+</script>
 }
 
 
-
-@*@section Styles {
-
-    @Styles.Render("~/Content/MyStyles")
-    }*@
 
 
