@@ -25,6 +25,9 @@ namespace MyStuff.Models
         [Display(Name = "Image Path")]
         public String ImagePath { get; set; }
 
+        [Display(Name = "Thumbnail Path")]
+        public String ThumbnailPath { get; set; }
+
         [Display(Name = "Date Photo Taken")]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTaken { get; set; }

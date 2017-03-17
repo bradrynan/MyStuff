@@ -159,6 +159,13 @@ namespace MyStuff.DAL
                 {
                     newImg.Save(HostingEnvironment.MapPath(photo.ImagePath), img.RawFormat);
                 }
+
+                photo.ThumbnailPath = String.Format("/GalleryImages/Thumbs/{0}{1}", fileName, extension);
+
+                using (System.Drawing.Image newImg = new Bitmap(img, 100, 100))
+                {
+                    newImg.Save(HostingEnvironment.MapPath(photo.ThumbnailPath), img.RawFormat);
+                }
             }
         }
 
@@ -179,6 +186,7 @@ namespace MyStuff.DAL
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(file.FileName);
 
             photo.ImagePath = blockBlob.Uri.ToString();
+            photo.ThumbnailPath = blockBlob.Uri.ToString();
 
             // Create or overwrite the "myblob" blob with contents from a local file.
             using (var fileStream = file.InputStream)

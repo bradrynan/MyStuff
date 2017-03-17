@@ -54,9 +54,9 @@ namespace MyStuff.ViewModels
                         saveChanges = true;
                     }
 
-                    if (existingPhoto.DateUploaded != ph.DateUploaded)
+                    if (existingPhoto.DateTaken != ph.DateTaken)
                     {
-                        existingPhoto.DateUploaded = ph.DateUploaded;
+                        existingPhoto.DateTaken = ph.DateTaken;
                         saveChanges = true;
                     }
 
