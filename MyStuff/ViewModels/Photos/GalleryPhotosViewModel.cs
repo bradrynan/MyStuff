@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyStuff.ViewModels
+namespace MyStuff.ViewModels.Photos
 {
     public class GalleryPhotosViewModel
     {

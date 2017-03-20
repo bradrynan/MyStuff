@@ -1,15 +1,16 @@
-﻿using MyStuff.DAL;
+﻿using MyStuff.Service;
 using MyStuff.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MyStuff.DAL;
 
-namespace MyStuff.ViewModels
+namespace MyStuff.ViewModels.Photos
 {
     public class DeletePhotosViewModel
     {
-        ManagePhotos manPhoto = new ManagePhotos();
+        ManagePhotosService manPhoto = new ManagePhotosService();
 
         private GalleryContext db = new GalleryContext();
         public string ErrorMessage { get; set; }

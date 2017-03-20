@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyStuff.ViewModels;
+using MyStuff.ViewModels.Photos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

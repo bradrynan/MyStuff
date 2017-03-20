@@ -1,16 +1,17 @@
 ﻿using MyStuff.DAL;
 using MyStuff.Models;
+using MyStuff.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyStuff.ViewModels
+namespace MyStuff.ViewModels.Photos
 {
     public class UpdatePhotosViewModel
     {
         private GalleryContext db = new GalleryContext();
-        private ManagePhotos managePhotos = new ManagePhotos();
+        private ManagePhotosService managePhotos = new ManagePhotosService();
 
         public PagedList<Photo> Images { get; set; }
 

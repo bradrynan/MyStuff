@@ -1,5 +1,6 @@
 ﻿using MyStuff.DAL;
 using MyStuff.Models;
+using MyStuff.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 
-namespace MyStuff.ViewModels
+namespace MyStuff.ViewModels.Photos
 {
     public class UploadPhotosViewModel
     {
@@ -52,7 +53,7 @@ namespace MyStuff.ViewModels
                 Photo.DateTaken = DateTime.Now.ToLocalTime();
             }
 
-            ManagePhotos managePhotos = new ManagePhotos();
+            ManagePhotosService managePhotos = new ManagePhotosService();
 
             managePhotos.AddPhoto(Photo, FileNamePrefix, file);
         }

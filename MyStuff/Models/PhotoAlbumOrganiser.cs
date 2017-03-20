@@ -1,4 +1,5 @@
 ﻿using MyStuff.DAL;
+using MyStuff.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,12 @@ namespace MyStuff.Models
 {
     public class PhotoAlbumOrganiser
     {
-        private GalleryContext db = new GalleryContext();
+        ManagePhotoAlbumService photoAlbumService = new ManagePhotoAlbumService();
+        ManagePhotosService photoService = new ManagePhotosService();
 
         public void CreateAlbumsByYear()
         {
-            //var phList = db.Photos
-            //   .OrderByDescending(x => x.DateTaken).ToList();
-
-
-            var phList = db.Photos.SqlQuery("SELECT * FROM dbo.Photo ORDER BY DateTaken DESC").ToList();
+            var phList = photoService.GetPhotos();
 
             foreach (Photo ph in phList)
             {
@@ -30,23 +28,18 @@ namespace MyStuff.Models
                 }
             }
 
-            db.SaveChanges();
-
+            photoAlbumService.Save();
         }
 
         private PhotoAlbum GetPhotoAlbum(DateTime DateTaken)
         {
             var photoAlbumName = "Taken in:" + DateTaken.Year.ToString();
 
+            var photoAlbum = photoAlbumService.GetPhotoAlbum(photoAlbumName);
 
-
-            var SQL = @"SELECT * FROM dbo.Album WHERE Name = '" + photoAlbumName + "'";
-            var phAlbum = db.PhotoAlbums.Include("Photos")
-                .Where(p => p.Name == photoAlbumName).FirstOrDefault();
-
-            if (phAlbum == null)
+            if (photoAlbum == null)
             {
-                phAlbum = new PhotoAlbum {
+                photoAlbum = new PhotoAlbum {
                     CreatedBy = "BRAD",
                     DateCreated = DateTime.Now,
                     Description = "Taken in year: " + DateTaken.Year.ToString(),
@@ -54,11 +47,10 @@ namespace MyStuff.Models
                     Photos = new List<Photo>()
                 };
 
-                db.PhotoAlbums.Add(phAlbum);
-                db.SaveChanges();
+                photoAlbumService.AddPhotoAlbum(photoAlbum);
             }
 
-            return phAlbum;
+            return photoAlbum;
         }
     }
 }

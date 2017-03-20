@@ -10,7 +10,7 @@ using MyStuff.DAL;
 using MyStuff.Models;
 using System.Drawing;
 using System.IO;
-using MyStuff.ViewModels;
+using MyStuff.ViewModels.Photos;
 
 namespace MyStuff.Controllers
 {
