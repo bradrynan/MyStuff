@@ -16,7 +16,7 @@ namespace MyStuff.Models.PhotoAlbum.Tests
         {
             PhotoAlbumOrganiser pao = new PhotoAlbumOrganiser();
 
-            pao.CreateAlbumsByYear();
+            pao.CreateAlbumsByYear(null);
         }
     }
 }

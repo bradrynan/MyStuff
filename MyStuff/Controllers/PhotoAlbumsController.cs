@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyStuff.DAL;
 using MyStuff.Models;
+using MyStuff.ViewModels.PhotoAlbums;
 
 namespace MyStuff.Controllers
 {
@@ -18,22 +19,20 @@ namespace MyStuff.Controllers
         // GET: PhotoAlbums
         public ActionResult Index()
         {
-            return View(db.PhotoAlbums.ToList());
+            return View(new IndexPhotoAlbumsViewModel());
         }
 
-        // GET: PhotoAlbums/Details/5
-        public ActionResult Details(int? id)
+        // GET: PhotoAlbums/Gallery/5
+        public ActionResult Gallery(int id = -1, int page = 1, int pageSize = 44)
         {
-            if (id == null)
+            if (id == -1)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PhotoAlbum photoAlbum = db.PhotoAlbums.Find(id);
-            if (photoAlbum == null)
-            {
-                return HttpNotFound();
-            }
-            return View(photoAlbum);
+
+            GalleryPhotoAlbumsViewModel vm = new GalleryPhotoAlbumsViewModel(id, page, pageSize);
+
+            return View(vm);
         }
 
         // GET: PhotoAlbums/Create

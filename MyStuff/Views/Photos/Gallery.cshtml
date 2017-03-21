@@ -8,7 +8,7 @@
 @Scripts.Render("~/bundles/GalleryPhotos")
 @Styles.Render("~/Content/GalleryPhotos")
 
-<h2>Image Gallery</h2>
+<h2 style="text-align:center">Images in Gallery : @Model.Images.TotalRecords </h2>
 
 @using (Html.BeginForm("Gallery", null, FormMethod.Get))
 {

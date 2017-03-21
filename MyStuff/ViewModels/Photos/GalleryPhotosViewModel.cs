@@ -15,12 +15,12 @@ namespace MyStuff.ViewModels.Photos
 
         public string Filter { get; set; }
 
-        public GalleryPhotosViewModel(string filter = null, int page = 1, int pageSize = 10)
+        public GalleryPhotosViewModel(string filter = null, int page = 1, int pageSize = 40)
         {
             LoadImages(filter, page, pageSize);
         }
 
-        private void LoadImages(string filter = null, int page = 1, int pageSize = 10)
+        private void LoadImages(string filter = null, int page = 1, int pageSize = 40)
         {
             Filter = filter;
             Images = new PagedList<Photo>();

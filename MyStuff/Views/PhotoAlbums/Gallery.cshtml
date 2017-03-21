@@ -1,0 +1,92 @@
+﻿@model MyStuff.ViewModels.PhotoAlbums.GalleryPhotoAlbumsViewModel
+
+@{
+    ViewBag.Title = "Image Gallery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/GalleryPhotos")
+@Styles.Render("~/Content/GalleryPhotos")
+
+<div style="border:2px solid black; margin:20px">
+    <h2 style="text-align:center">@Model.PhotoAlbum.Description</h2>
+    <h5 style="text-align:center">Number of images: @Model.PhotoAlbum.Photos.Count</h5>
+    <h5 style="text-align:center">Date Created: @Model.PhotoAlbum.DateCreated</h5>
+</div>
+
+@using (Html.BeginForm("Gallery", null, FormMethod.Get))
+{
+
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <!-- The container for the modal slides -->
+        <div class="slides"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next" style="max-height: 500px; min-height: 400px;"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin:20px">
+        <div id="links">
+            @foreach (var item in Model.Images.Content)
+            {
+                <div style="float:left">
+                    <a href="@item.ImagePath" title="@item.Description" data-gallery>
+                        <img src="@item.ThumbnailPath" alt="@item.Description" class=".img-thumbnail image-gallery" />
+                    </a>
+
+                    <div class="imageDescriptionInGallery">@item.Description</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div style="clear:both">
+
+        <div id="currentImageDescriptionInGallery">Nothing</div>
+
+        <hr />
+        @{
+            var grid = new WebGrid(
+                        canPage: true,
+                        rowsPerPage: Model.Images.PageSize,
+                        canSort: true);
+
+            grid.Bind(Model.Images.Content, rowCount: Model.Images.TotalRecords, autoSortAndPage: false);
+            grid.Pager(WebGridPagerModes.All);
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" },
+            fillEmptyRows: false,
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns());
+        }
+    </div>
+            }
+
+

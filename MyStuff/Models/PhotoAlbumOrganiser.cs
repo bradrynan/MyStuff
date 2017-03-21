@@ -12,28 +12,28 @@ namespace MyStuff.Models
         ManagePhotoAlbumService photoAlbumService = new ManagePhotoAlbumService();
         ManagePhotosService photoService = new ManagePhotosService();
 
-        public void CreateAlbumsByYear()
+        public void CreateAlbumsByYear(int? photoID)
         {
-            var phList = photoService.GetPhotos();
+            var phList = photoService.GetPhotos(photoID);
 
             foreach (Photo ph in phList)
             {
-                PhotoAlbum phAlbum = GetPhotoAlbum(ph.DateTaken);
+                PhotoAlbum phAlbum = CreatePhotoAlbumIfNotExists(ph.DateTaken);
 
                 var existingPhoto = phAlbum.Photos.Where(p => p.PhotoId == ph.PhotoId).SingleOrDefault();
 
                 if (existingPhoto == null)
                 {
-                    phAlbum.Photos.Add(ph);
+                    photoAlbumService.AddPhoto(phAlbum, ph);
                 }
             }
 
             photoAlbumService.Save();
         }
 
-        private PhotoAlbum GetPhotoAlbum(DateTime DateTaken)
+        private PhotoAlbum CreatePhotoAlbumIfNotExists(DateTime DateTaken)
         {
-            var photoAlbumName = "Taken in:" + DateTaken.Year.ToString();
+            var photoAlbumName = DateTaken.Year.ToString();
 
             var photoAlbum = photoAlbumService.GetPhotoAlbum(photoAlbumName);
 
@@ -42,7 +42,7 @@ namespace MyStuff.Models
                 photoAlbum = new PhotoAlbum {
                     CreatedBy = "BRAD",
                     DateCreated = DateTime.Now,
-                    Description = "Taken in year: " + DateTaken.Year.ToString(),
+                    Description = "Photos from " + DateTaken.Year.ToString(),
                     Name = photoAlbumName,
                     Photos = new List<Photo>()
                 };

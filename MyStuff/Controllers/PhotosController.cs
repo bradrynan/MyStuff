@@ -74,7 +74,7 @@ namespace MyStuff.Controllers
         }
 
         // Show the gallery
-        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 18)
+        public ActionResult Gallery(string filter = null, int page = 1, int pageSize = 44)
         {
             GalleryPhotosViewModel vm = new GalleryPhotosViewModel(filter, page, pageSize);
 

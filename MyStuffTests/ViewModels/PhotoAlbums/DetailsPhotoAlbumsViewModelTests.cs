@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MyStuff.DAL;
+using MyStuff.Models;
 using MyStuff.ViewModels.PhotoAlbums;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,23 @@ namespace MyStuff.ViewModels.PhotoAlbums.Tests
     [TestClass()]
     public class DetailsPhotoAlbumsViewModelTests
     {
+        private GalleryContext db = new GalleryContext();
+
         [TestMethod()]
         public void DetailsPhotoAlbumsViewModelTest()
         {
-            DetailsPhotoAlbumsViewModel vm = new DetailsPhotoAlbumsViewModel(1);
+            var phAlbum = db.PhotoAlbums.Include("Photos").FirstOrDefault();
 
-            Assert.IsNotNull(vm.PhotoAlbum);
-            Assert.IsNotNull(vm.PhotoAlbum.Photos);
+            if (phAlbum != null)
+            {
+                GalleryPhotoAlbumsViewModel vm = new GalleryPhotoAlbumsViewModel(phAlbum.AlbumId);
+
+                Assert.IsNotNull(vm.PhotoAlbum);
+                Assert.IsTrue(vm.PhotoAlbum.AlbumId == phAlbum.AlbumId);
+
+                Assert.IsNotNull(vm.PhotoAlbum.Photos);
+                Assert.IsTrue(vm.PhotoAlbum.Photos.Count == phAlbum.Photos.Count);
+            }
         }
     }
 }

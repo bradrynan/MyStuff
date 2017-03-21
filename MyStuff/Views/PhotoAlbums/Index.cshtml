@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyStuff.Models.PhotoAlbum>
+﻿@model MyStuff.ViewModels.PhotoAlbums.IndexPhotoAlbumsViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -11,23 +11,46 @@
 </p>
 <table class="table">
     <tr>
+        <th></th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.PhotoAlbum.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.PhotoAlbum.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            @Html.DisplayNameFor(model => model.PhotoAlbum.DateCreated)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreatedBy)
+            @Html.DisplayNameFor(model => model.PhotoAlbum.CreatedBy)
+        </th>
+        <th>
+            Image Count
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.PhotoAlbums) {
     <tr>
+        <td>
+            @{
+                var actionLink = "/PhotoAlbums/Gallery/" + item.AlbumId;
+                var imageSrc = "blah.jpg";
+                var altDescription = "No Photos";
+
+                if (item.Photos.Count > 0)
+                {
+                    imageSrc = item.Photos.Last().ThumbnailPath;
+                    altDescription = item.Photos.Last().Description;
+                }
+
+            }
+
+            <a href="@actionLink">
+                <img src="@imageSrc" alt="@altDescription" class=".img-thumbnail image-update" />
+            </a>
+
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
@@ -40,9 +63,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.CreatedBy)
         </td>
+        <td style="text-align:left">
+            @Html.DisplayFor(modelItem => item.Photos.Count)
+        </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.AlbumId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AlbumId }) |
+            @Html.ActionLink("Gallery", "Gallery", new { id=item.AlbumId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.AlbumId })
         </td>
     </tr>

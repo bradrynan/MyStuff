@@ -10,10 +10,24 @@ namespace MyStuff.DAL
     public class GalleryContext : DbContext
     {
         public GalleryContext()
-            : base("ManageMyStuffContext")
+            : base(GetContext())
         {
+
         }
 
+        private static string GetContext()
+        {
+            string contextString = "ManageMyStuffContext_Local";
+
+            string storeModeCloud = System.Web.Configuration.WebConfigurationManager.AppSettings["StorageModeCloud"];
+
+            if (storeModeCloud == "true")
+            {
+                contextString = "ManageMyStuffContext_Azure";
+            }
+
+            return contextString;
+        }
         //public GalleryContext()
         //  : base("MyStuff")
         //{

@@ -18,9 +18,16 @@ namespace MyStuff.Service
         private GalleryContext db = new GalleryContext();
         ImageStorageService imageStoreageService = new ImageStorageService();
 
-        public List<Photo> GetPhotos()
+        public List<Photo> GetPhotos(int? photoId)
         {
-            var phList = db.Photos.SqlQuery("SELECT * FROM dbo.Photo ORDER BY DateTaken DESC").ToList();
+            var SQL = "SELECT * FROM dbo.Photo";
+            if (photoId != null)
+            {
+                SQL += " WHERE PhotoId = " + photoId.ToString();
+            }
+            SQL += " ORDER BY DateTaken DESC";
+
+            var phList = db.Photos.SqlQuery(SQL).ToList();
 
             return phList;
         }

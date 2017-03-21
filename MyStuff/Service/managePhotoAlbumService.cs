@@ -2,6 +2,7 @@
 using MyStuff.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -11,14 +12,17 @@ namespace MyStuff.Service
     {
         private GalleryContext db = new GalleryContext();
 
+        public List<PhotoAlbum> GetPhotoAlbums()
+        {
+            return db.PhotoAlbums.Include("Photos").ToList();
+        }
+
         public PhotoAlbum GetPhotoAlbum(int photoAlbumId)
         {
-            PhotoAlbum pa = new PhotoAlbum();
-
             var phAlbum = db.PhotoAlbums.Include("Photos")
                 .Where(p => p.AlbumId == photoAlbumId).FirstOrDefault();
 
-            return pa;
+            return phAlbum;
         }
 
         public PhotoAlbum GetPhotoAlbum(string photoAlbumName)
@@ -33,6 +37,12 @@ namespace MyStuff.Service
         {
             db.PhotoAlbums.Add(photoAlbum);
             Save();
+        }
+
+        public void AddPhoto(PhotoAlbum photoAlbum, Photo photo)
+        {
+            db.Entry(photo).State = EntityState.Unchanged;
+            photoAlbum.Photos.Add(photo);
         }
 
         public void Save()
