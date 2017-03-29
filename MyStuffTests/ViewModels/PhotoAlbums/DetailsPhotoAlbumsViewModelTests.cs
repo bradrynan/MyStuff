@@ -22,7 +22,7 @@ namespace MyStuff.ViewModels.PhotoAlbums.Tests
 
             if (phAlbum != null)
             {
-                GalleryPhotoAlbumsViewModel vm = new GalleryPhotoAlbumsViewModel(phAlbum.AlbumId);
+                AlbumGalleryPhotoAlbumsViewModel vm = new AlbumGalleryPhotoAlbumsViewModel(phAlbum.AlbumId);
 
                 Assert.IsNotNull(vm.PhotoAlbum);
                 Assert.IsTrue(vm.PhotoAlbum.AlbumId == phAlbum.AlbumId);

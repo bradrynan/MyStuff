@@ -64,7 +64,7 @@ namespace MyStuff.Service
             newPhoto.DateUploaded = DateTime.Now;
             newPhoto.UploadedBy = "BRAD";
 
-            newPhoto.TakenBy = String.IsNullOrEmpty(newPhoto.TakenBy) ?Environment.UserName: newPhoto.TakenBy;
+            newPhoto.TakenBy = String.IsNullOrEmpty(ph.TakenBy) ?Environment.UserName: ph.TakenBy;
 
             string storeModeCloud = System.Web.Configuration.WebConfigurationManager.AppSettings["StorageModeCloud"];
 

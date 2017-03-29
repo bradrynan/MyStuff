@@ -36,85 +36,85 @@
 
 
 
-        <div class="row">
+    <div class="row">
 
-            <div class="panel">
+        <div class="panel">
 
-                <div class="panel-body">
+            <div class="panel-body">
 
-                    <div class="table-responsive">
+                <div class="table-responsive">
 
-                        <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                CreatedOn
+                            </th>
+                            <th>
+                                TakenBy
+                            </th>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+
+                        @for (int i = 0; i < Model.Images.Content.Count; i++)
+                        {
                             <tr>
 
-                                <th>
-                                    File Name
-                                </th>
-                                <th>
-                                    Description
-                                </th>
-                                <th>
-                                    CreatedOn
-                                </th>
-                                <th>
-                                    TakenBy
-                                </th>
-                                <th>
-                                    Image
-                                </th>
-                                <th>
-                                    Action
-                                </th>
-                            </tr>
+                                @*<td>
 
-                            @for (int i = 0; i < Model.Images.Content.Count; i++)
-                            {
-                                <tr>
+                                                               @Html.TextBox("Photos[" + (@i + 10) + "].PhotoId",
+                                    Model.Images.Content[i].PhotoId, new { @readonly = "readonly", @class = "tableCellTextBox tableCellTextBoxSmallCell" })
+                                                           </td>*@
+                                <td>
+                                    @Html.Hidden("Photos.Index", (@i + 10))
+                                    @Html.Hidden("Photos[" + (@i + 10) + "].PhotoId", Model.Images.Content[i].PhotoId)
 
-                                    @*<td>
-
-                                        @Html.TextBox("Photos[" + (@i + 10) + "].PhotoId",
-             Model.Images.Content[i].PhotoId, new { @readonly = "readonly", @class = "tableCellTextBox tableCellTextBoxSmallCell" })
-                                    </td>*@
-                                    <td>
-                                        @Html.Hidden("Photos.Index", (@i + 10))
-                                        @Html.Hidden("Photos[" + (@i + 10) + "].PhotoId", Model.Images.Content[i].PhotoId)
-
-                                        @Html.TextBox("Photos[" + (@i + 10) + "].FileName",
+                                    @Html.TextBox("Photos[" + (@i + 10) + "].FileName",
              Model.Images.Content[i].FileName, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
 
-                                    </td>
-                                    <td>
-                                        @Html.TextArea("Photos[" + (@i + 10) + "].Description",
+                                </td>
+                                <td>
+                                    @Html.TextArea("Photos[" + (@i + 10) + "].Description",
              Model.Images.Content[i].Description, new { @class = "tableCellTextArea tableCellTextAreaEditable" })
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("Photos[" + (@i + 10) + "].DateTaken",
+                                </td>
+                                <td>
+                                    @Html.TextBox("Photos[" + (@i + 10) + "].DateTaken",
                         Model.Images.Content[i].DateTaken, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
-                                        @Html.ValidationMessageFor(model => model.Images.Content[i].DateTaken, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.Images.Content[i].DateTaken, "", new { @class = "text-danger" })
 
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("Photos[" + (@i + 10) + "].TakenBy",
+                                </td>
+                                <td>
+                                    @Html.TextBox("Photos[" + (@i + 10) + "].TakenBy",
              Model.Images.Content[i].TakenBy, new { @class = "tableCellTextBox tableCellTextBoxEditable" })
 
-                                    </td>
-                                    <td>
-                                        <a href="@Model.Images.Content[i].ImagePath" title="@Model.Images.Content[i].Description">
-                                            <img src="@Model.Images.Content[i].ImagePath" alt="@Model.Images.Content[i].Description" class=".img-thumbnail image-update" />
-                                        </a>
+                                </td>
+                                <td>
+                                    <a href="@Model.Images.Content[i].ImagePath" title="@Model.Images.Content[i].Description">
+                                        <img src="@Model.Images.Content[i].ImagePath" alt="@Model.Images.Content[i].Description" class=".img-thumbnail image-update" />
+                                    </a>
 
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Delete", "Delete", new { photoId = Model.Images.Content[i].PhotoId })
-                                    </td>
-                                </tr>
-                            }
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Delete", "Delete", new { photoId = Model.Images.Content[i].PhotoId })
+                                </td>
+                            </tr>
+                        }
 
-                        </table>
+                    </table>
 
 
-                    </div> @* <div class="panel-body"> *@
+                </div> @* <div class="panel-body"> *@
             </div> @* <div class="col-md-12"> *@
         </div>  @* <div class="row">*@
     </div> @*<div class="table-responsive">*@
@@ -134,9 +134,10 @@
             @grid.GetHtml(htmlAttributes: new { id = "grid" },
          fillEmptyRows: false,
          mode: WebGridPagerModes.All,
-         columns: grid.Columns());
+         columns: grid.Columns(),
+         numericLinksCount:10);
         }
-        </div>
+    </div>
 
         <p>
             <input type="submit" value="Save Changes" />

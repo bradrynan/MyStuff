@@ -17,20 +17,20 @@ namespace MyStuff.Controllers
         private GalleryContext db = new GalleryContext();
 
         // GET: PhotoAlbums
-        public ActionResult Index()
+        public ActionResult AlbumIndex()
         {
-            return View(new IndexPhotoAlbumsViewModel());
+            return View(new AlbumIndexPhotoAlbumsViewModel());
         }
 
         // GET: PhotoAlbums/Gallery/5
-        public ActionResult Gallery(int id = -1, int page = 1, int pageSize = 44)
+        public ActionResult AlbumGallery(int id = -1, int page = 1, int pageSize = 44)
         {
             if (id == -1)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            GalleryPhotoAlbumsViewModel vm = new GalleryPhotoAlbumsViewModel(id, page, pageSize);
+            AlbumGalleryPhotoAlbumsViewModel vm = new AlbumGalleryPhotoAlbumsViewModel(id, page, pageSize);
 
             return View(vm);
         }
@@ -52,7 +52,7 @@ namespace MyStuff.Controllers
             {
                 db.PhotoAlbums.Add(photoAlbum);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("AlbumIndex");
             }
 
             return View(photoAlbum);
@@ -84,7 +84,7 @@ namespace MyStuff.Controllers
             {
                 db.Entry(photoAlbum).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("AlbumIndex");
             }
             return View(photoAlbum);
         }
@@ -110,9 +110,22 @@ namespace MyStuff.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             PhotoAlbum photoAlbum = db.PhotoAlbums.Find(id);
-            db.PhotoAlbums.Remove(photoAlbum);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            if (photoAlbum != null)
+            {
+                db.PhotoAlbums.Remove(photoAlbum);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("AlbumIndex");
+        }
+
+        // GET:
+        public ActionResult OrganiseByYear()
+        {
+            new PhotoAlbumOrganiser().CreateAlbumsByYear(null);
+
+            return View("AlbumIndex",  new AlbumIndexPhotoAlbumsViewModel());
         }
 
         protected override void Dispose(bool disposing)

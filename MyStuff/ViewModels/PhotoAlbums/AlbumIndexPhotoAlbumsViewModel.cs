@@ -7,14 +7,14 @@ using System.Web;
 
 namespace MyStuff.ViewModels.PhotoAlbums
 {
-    public class IndexPhotoAlbumsViewModel
+    public class AlbumIndexPhotoAlbumsViewModel
     {
         ManagePhotoAlbumService photoAlbumService = new ManagePhotoAlbumService();
 
         public PhotoAlbum PhotoAlbum { get; }
         public List<PhotoAlbum> PhotoAlbums  { get; }
 
-        public IndexPhotoAlbumsViewModel()
+        public AlbumIndexPhotoAlbumsViewModel()
         {
             PhotoAlbum = new PhotoAlbum();
 

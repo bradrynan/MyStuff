@@ -1,13 +1,15 @@
-﻿@model MyStuff.ViewModels.PhotoAlbums.IndexPhotoAlbumsViewModel
+﻿@model MyStuff.ViewModels.PhotoAlbums.AlbumIndexPhotoAlbumsViewModel
 
 @{
     ViewBag.Title = "Index";
 }
 
+@Styles.Render("~/Content/UpdatePhotos")
+
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create")  |  @Html.ActionLink("Organise By Year", "OrganiseByYear")
 </p>
 <table class="table">
     <tr>
@@ -46,7 +48,7 @@
 
             }
 
-            <a href="@actionLink">
+            <a href="@imageSrc">
                 <img src="@imageSrc" alt="@altDescription" class=".img-thumbnail image-update" />
             </a>
 
@@ -68,7 +70,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.AlbumId }) |
-            @Html.ActionLink("Gallery", "Gallery", new { id=item.AlbumId }) |
+            @Html.ActionLink("Gallery", "AlbumGallery", new { id=item.AlbumId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.AlbumId })
         </td>
     </tr>

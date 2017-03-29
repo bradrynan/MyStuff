@@ -14,7 +14,8 @@ namespace MyStuff.Service
 
         public List<PhotoAlbum> GetPhotoAlbums()
         {
-            return db.PhotoAlbums.Include("Photos").ToList();
+            return db.PhotoAlbums.Include("Photos")
+                .OrderByDescending(x => x.Name).ToList();
         }
 
         public PhotoAlbum GetPhotoAlbum(int photoAlbumId)

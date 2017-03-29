@@ -32,10 +32,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Photo Gallery", "Gallery", "Photos")</li>
-                    <li>@Html.ActionLink("Photo Albums", "Index", "PhotoAlbums")</li>
-                    <li>@Html.ActionLink("Maintain Photo List", "Index", "Photos")</li>
+                    <li>@Html.ActionLink("Photo Albums", "AlbumIndex", "PhotoAlbums")</li>
+                    @*<li>@Html.ActionLink("Maintain Photo List", "Index", "Photos")</li>*@
                     <li>@Html.ActionLink("Update Photos", "Update", "Photos")</li>
-                    <li>@Html.ActionLink("Upload Photos", "Upload", "Photos")</li>
+                    <li>@Html.ActionLink("Add Photos", "Upload", "Photos")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

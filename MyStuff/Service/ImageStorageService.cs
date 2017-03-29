@@ -41,6 +41,30 @@ namespace MyStuff.Service
             }
         }
 
+        public void DeleteAllBlobs()
+        {
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+               CloudConfigurationManager.GetSetting("AzureStorageConnectionString"));
+
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            CloudBlobContainer container = blobClient.GetContainerReference("managemystuffphotos");
+
+            foreach (IListBlobItem item in container.ListBlobs(null, false))
+            {
+                if (item.GetType() == typeof(CloudBlockBlob))
+                {
+                    CloudBlockBlob blob = (CloudBlockBlob)item;
+
+                    blob.DeleteIfExists();
+
+                }               
+            }
+        }
+
         private void DeleteImageLocal(Photo ph)
         {
             string imagePath = HostingEnvironment.MapPath(ph.ImagePath);

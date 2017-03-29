@@ -31,7 +31,7 @@ namespace MyStuff.ViewModels.Photos
             Photo.TakenBy = Environment.UserName;
         }
 
-        public void UploadFile(HttpPostedFileBase file, string lastModifiedDateTicks)
+        public void UploadFile(HttpPostedFileBase file, string lastModifiedDateTicks, string photoDescription, string photoTakenBy)
         {
             if ((file == null) || (file.ContentLength == 0))
             {
@@ -51,6 +51,16 @@ namespace MyStuff.ViewModels.Photos
             catch (Exception)
             {
                 Photo.DateTaken = DateTime.Now.ToLocalTime();
+            }
+
+            if (photoDescription != null)
+            {
+                Photo.Description = photoDescription;
+            }
+
+            if (photoTakenBy != null)
+            {
+                Photo.TakenBy = photoTakenBy;
             }
 
             ManagePhotosService managePhotos = new ManagePhotosService();

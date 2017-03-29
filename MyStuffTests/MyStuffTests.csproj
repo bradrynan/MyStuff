@@ -63,6 +63,7 @@
     <Compile Include="Controllers\PhotosControllerTests.cs" />
     <Compile Include="Models\PhotoAlbum\PhotoAlbumOrganiserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ImageStorageServiceTests.cs" />
     <Compile Include="ViewModels\GalleryPhotosViewModelTests.cs" />
     <Compile Include="ViewModels\PhotoAlbums\DetailsPhotoAlbumsViewModelTests.cs" />
     <Compile Include="ViewModels\UploadPhotosViewModelTests.cs" />

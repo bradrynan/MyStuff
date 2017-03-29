@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyStuff.Models;
 using MyStuff.Service;
 using System;
 using System.Collections.Generic;
@@ -7,19 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyStuff.Models.PhotoAlbum.Tests
+namespace MyStuff.Service.Tests
 {
     [TestClass()]
-    public class PhotoAlbumOrganiserTests
+    public class ImageStorageServiceTests
     {
         [TestMethod()]
-        public void CreateAlbumsByYearTest()
+        public void DeleteAllBlobsTest()
         {
-            PhotoAlbumOrganiser pao = new PhotoAlbumOrganiser();
+            ImageStorageService iss = new ImageStorageService();
 
-            pao.CreateAlbumsByYear(null);
+            // iss.DeleteAllBlobs();
         }
-
-       
     }
 }

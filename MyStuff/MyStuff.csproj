@@ -254,8 +254,8 @@
     <Compile Include="Models\PhotoAlbumOrganiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\PhotoAlbums\GalleryPhotoAlbumsViewModel.cs" />
-    <Compile Include="ViewModels\PhotoAlbums\IndexPhotoAlbumsViewModel.cs" />
+    <Compile Include="ViewModels\PhotoAlbums\AlbumGalleryPhotoAlbumsViewModel.cs" />
+    <Compile Include="ViewModels\PhotoAlbums\AlbumIndexPhotoAlbumsViewModel.cs" />
     <Compile Include="ViewModels\Photos\DeletePhotosViewModel.cs" />
     <Compile Include="ViewModels\Photos\GalleryPhotosViewModel.cs" />
     <Compile Include="ViewModels\Photos\UpdatePhotosViewModel.cs" />
@@ -350,9 +350,9 @@
     <Content Include="Views\Photos\Index.cshtml" />
     <Content Include="Views\PhotoAlbums\Create.cshtml" />
     <Content Include="Views\PhotoAlbums\Delete.cshtml" />
-    <Content Include="Views\PhotoAlbums\Gallery.cshtml" />
+    <Content Include="Views\PhotoAlbums\AlbumGallery.cshtml" />
     <Content Include="Views\PhotoAlbums\Edit.cshtml" />
-    <Content Include="Views\PhotoAlbums\Index.cshtml" />
+    <Content Include="Views\PhotoAlbums\AlbumIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

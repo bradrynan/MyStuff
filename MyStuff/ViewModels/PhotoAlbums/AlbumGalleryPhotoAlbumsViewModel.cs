@@ -8,14 +8,14 @@ using System.Web;
 
 namespace MyStuff.ViewModels.PhotoAlbums
 {
-    public class GalleryPhotoAlbumsViewModel
+    public class AlbumGalleryPhotoAlbumsViewModel
     {
         public PhotoAlbum PhotoAlbum { get; set; }
 
         public PagedList<Photo> Images { get; set; }
 
 
-        public GalleryPhotoAlbumsViewModel(int photoAlbumId, int page = 1, int pageSize = 40)
+        public AlbumGalleryPhotoAlbumsViewModel(int photoAlbumId, int page = 1, int pageSize = 40)
         {
             PhotoAlbum = new ManagePhotoAlbumService().GetPhotoAlbum(photoAlbumId);
 
