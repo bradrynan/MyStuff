@@ -150,12 +150,48 @@ namespace MyStuff.Controllers
 
         #region Upload Files
         // Upload
+        //[Authorize]
         [HttpGet]
         public ActionResult Upload()
         {
-            UploadPhotosViewModel vm = new UploadPhotosViewModel();
+            UploadPhotosViewModel vm = new UploadPhotosViewModel(User.Identity.Name);
 
             return View(vm);
+        }
+
+        //[HttpPost, Authorize]
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            UploadPhotosViewModel viewModel = new UploadPhotosViewModel(User.Identity.Name);
+
+            // Checking no of files injected in Request object
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        HttpPostedFileBase file = Request.Files[i];
+                        var lastModifiedDate = Request.Form.Get(file.FileName);
+                        var photoDescription = Request.Form.Get("photoDescription");
+                        var userName = User.Identity.Name;
+                        var photoTakenBy = Request.Form.Get("photoTakenBy");
+                        viewModel.UploadFile(file, lastModifiedDate, photoDescription, photoTakenBy, userName);
+                    }
+
+                    // Returns message that successfully uploaded
+                    return Json("File Uploaded Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    return Json("Error occurred. Error details: " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
         }
 
         [HttpPost]
@@ -187,38 +223,7 @@ namespace MyStuff.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpPost]
-        public ActionResult UploadFiles()
-        {
-            UploadPhotosViewModel viewModel = new UploadPhotosViewModel();
 
-            // Checking no of files injected in Request object
-            if (Request.Files.Count > 0)
-            {
-                try
-                {
-                    for (int i = 0; i < Request.Files.Count; i++)
-                    {
-                        HttpPostedFileBase file = Request.Files[i];
-                        var lastModifiedDate = Request.Form.Get(file.FileName);
-                        var photoDescription = Request.Form.Get("photoDescription");
-                        var photoTakenBy = Request.Form.Get("photoTakenBy");
-                        viewModel.UploadFile(file, lastModifiedDate, photoDescription, photoTakenBy);
-                    }
-
-                    // Returns message that successfully uploaded
-                    return Json("File Uploaded Successfully!");
-                }
-                catch (Exception ex)
-                {
-                    return Json("Error occurred. Error details: " + ex.Message);
-                }
-            }
-            else
-            {
-                return Json("No files selected.");
-            }
-        }
 
     }
 }

@@ -22,16 +22,21 @@ namespace MyStuff.ViewModels.Photos
 
         public Photo Photo { get; set; }
 
-        public UploadPhotosViewModel()
+        public UploadPhotosViewModel(string userName)
         {
             Photo = new Photo();
 
             Photo.DateUploaded = DateTime.Now;
             Photo.Description = "UPLOAD";
+
             Photo.TakenBy = Environment.UserName;
         }
 
-        public void UploadFile(HttpPostedFileBase file, string lastModifiedDateTicks, string photoDescription, string photoTakenBy)
+        public void UploadFile(HttpPostedFileBase file, 
+            string lastModifiedDateTicks, 
+            string photoDescription, 
+            string photoTakenBy,
+            string photoUploadedBy)
         {
             if ((file == null) || (file.ContentLength == 0))
             {
@@ -61,6 +66,11 @@ namespace MyStuff.ViewModels.Photos
             if (photoTakenBy != null)
             {
                 Photo.TakenBy = photoTakenBy;
+            }
+
+            if (photoUploadedBy != null)
+            {
+                Photo.UploadedBy = photoUploadedBy;
             }
 
             ManagePhotosService managePhotos = new ManagePhotosService();

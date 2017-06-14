@@ -21,8 +21,22 @@ namespace MyStuff.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base(GetContext())
         {
+        }
+
+        private static string GetContext()
+        {
+            string contextString = "ManageMyStuffContext_Local";
+
+            string storeModeCloud = System.Web.Configuration.WebConfigurationManager.AppSettings["StorageModeCloud"];
+
+            if (storeModeCloud == "true")
+            {
+                contextString = "ManageMyStuffContext_Azure";
+            }
+
+            return contextString;
         }
 
         public static ApplicationDbContext Create()

@@ -230,6 +230,10 @@
     <Compile Include="Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="DAL\GalleryContext.cs" />
+    <Compile Include="Migrations\201704201040587_id.cs" />
+    <Compile Include="Migrations\201704201040587_id.Designer.cs">
+      <DependentUpon>201704201040587_id.cs</DependentUpon>
+    </Compile>
     <Compile Include="Service\ImageStorageService.cs" />
     <Compile Include="Service\ManagePhotoAlbumService.cs" />
     <Compile Include="Service\ManagePhotosService.cs" />
@@ -370,6 +374,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703162305496_thumbNail.resx">
       <DependentUpon>201703162305496_thumbNail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704201040587_id.resx">
+      <DependentUpon>201704201040587_id.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -62,7 +62,8 @@ namespace MyStuff.Service
             newPhoto.DateTaken = ph.DateTaken > dtSALDBMin ? ph.DateTaken : DateTime.Now;
 
             newPhoto.DateUploaded = DateTime.Now;
-            newPhoto.UploadedBy = "BRAD";
+
+            newPhoto.UploadedBy = ph.UploadedBy == null?"BRAD": ph.UploadedBy;
 
             newPhoto.TakenBy = String.IsNullOrEmpty(ph.TakenBy) ?Environment.UserName: ph.TakenBy;
 
